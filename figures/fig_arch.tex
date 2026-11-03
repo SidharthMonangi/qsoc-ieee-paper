@@ -1,0 +1,38 @@
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage[T1]{fontenc}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+\begin{document}
+\begin{tikzpicture}[font=\scriptsize,
+ box/.style={draw=black!70,rounded corners=2pt,fill=white,align=center,minimum height=7mm,inner sep=2.5pt,line width=0.4pt},
+ sbox/.style={box,fill=blue!6},qbox/.style={box,fill=violet!8},
+ lay/.style={draw=black!45,dashed,rounded corners=4pt,inner sep=5pt,line width=0.4pt},
+ lab/.style={font=\scriptsize\bfseries,text=black!70},
+ ar/.style={-{Stealth[length=1.8mm]},line width=0.45pt}]
+% presentation tier
+\node[box,fill=gray!10,minimum width=28mm] (br) {Analyst browser\\React 18 SPA (Vite, Tailwind, Chart.js)};
+\node[box,fill=gray!10,right=14mm of br,minimum width=30mm] (ag) {Endpoint agent\\(Python, enrolled device)};
+\node[box,fill=gray!10,right=14mm of ag,minimum width=30mm] (sim) {Controlled simulator\\11 synthetic scenarios};
+\node[box,fill=gray!10,right=14mm of sim,minimum width=30mm] (ext) {Other log sources\\(Linux auth, Windows, net)};
+% proxy
+\node[box,fill=orange!10,below=8mm of $(br.south)!0.5!(sim.south)$,minimum width=62mm] (ng) {nginx reverse proxy\\TLS termination \;|\; HTTP$\rightarrow$HTTPS \;|\; \texttt{/api/*} and WebSocket \texttt{/api/live/ws}};
+% backend
+\node[sbox,below=11mm of ng.south west,anchor=north west,minimum width=26mm] (rt) {Routes (16)\\thin FastAPI\\endpoints};
+\node[sbox,right=3mm of rt,minimum width=26mm] (sv) {Services\\ingestion, incidents,\\audit, reports};
+\node[sbox,right=3mm of sv,minimum width=26mm] (det) {Detection engine\\17 rules, 5 categories\\MITRE ATT\&CK tags};
+\node[sbox,right=3mm of det,minimum width=26mm] (sc) {Security\\JWT, Argon2,\\RBAC, rate limit};
+\node[sbox,below=4mm of rt,minimum width=26mm] (ing) {Ingestion\\normalizer (5 formats)};
+\node[sbox,below=4mm of sv,minimum width=26mm] (simsvc) {Simulation service\\expected-alert check};
+\node[qbox,below=4mm of det,minimum width=26mm] (qa) {Quantum module\\crypto assessment,\\QRI, readiness map};
+\node[qbox,below=4mm of sc,minimum width=26mm] (qk) {Qiskit Aer\\Grover, Shor (toy)\\ML-DSA-65 signing};
+% db
+\node[box,fill=green!8,below=9mm of $(simsvc.south)!0.5!(qa.south)$,minimum width=52mm] (db) {PostgreSQL (Docker) / SQLite (dev)\\events, alerts, incidents, hosts, crypto assets, assessments, audit log};
+\begin{scope}[on background layer]
+ \node[lay,fit=(br)(ag)(sim)(ext),label={[lab,anchor=south west]north west:Clients and event sources}] {};
+ \node[lay,fit=(rt)(sc)(ing)(qk),label={[lab,anchor=south west]north west:FastAPI backend (Python 3.13)}] (bk) {};
+\end{scope}
+\draw[ar] (br)--(ng); \draw[ar] (ag)--(ng); \draw[ar] (sim)--(ng); \draw[ar] (ext.south)|-($(ng.east)+(0,2mm)$);
+\draw[ar] (ng.south)--($(ng.south)+(0,-4mm)$);
+\draw[ar] (rt)--(sv); \draw[ar] (sv)--(det); \draw[ar] (rt.south)--(ing.north); \draw[ar] (sv.south)--(simsvc.north); \draw[ar] (det.south)--(qa.north);
+\draw[ar] (bk.south)--(db.north);
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,12 @@
+auth\_failure\_burst & \texttt{auth.brute\_force\_burst} & high & 0.85 & T1110 & 12 & PASS \\
+repeated\_login\_attempts & \texttt{auth.repeated\_failed\_logins} & medium & 0.70 & T1110 & 6 & PASS \\
+successful\_login\_after\_failures & \texttt{auth.successful\_login\_after\_failures} & high & 0.80 & T1078 & 5 & PASS \\
+synthetic\_port\_scan & \texttt{network.synthetic\_port\_scan} & high & 0.80 & T1046 & 12 & PASS \\
+suspicious\_web\_request & \texttt{web.suspicious\_request\_pattern} & high & 0.75 & T1190 & 1 & PASS \\
+privilege\_escalation\_indicator & \texttt{endpoint.privilege\_escalation\_indicator} & high & 0.80 & none & 1 & PASS \\
+suspicious\_process\_event & \texttt{endpoint.suspicious\_process} & medium & 0.70 & none & 1 & PASS \\
+persistence\_indicator & \texttt{endpoint.persistence\_indicator} & high & 0.80 & T1547 & 1 & PASS \\
+data\_access\_anomaly & \texttt{endpoint.data\_access\_anomaly} & medium & 0.65 & T1005 & 1 & PASS \\
+ransomware\_like\_file\_activity & \texttt{endpoint.ransomware\_like\_file\_activity\_burst} & critical & 0.90 & T1486 & 6 & PASS \\
+ioc\_test\_indicator\_match & \texttt{threat\_intel.ioc\_match} & medium & 1.00 & none & 1 & PASS \\
+\bottomrule
